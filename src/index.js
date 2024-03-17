@@ -1,17 +1,61 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import * as React from 'react';
+import { createRoot } from 'react-dom/client';
+import {
+  AdaptivityProvider,
+  ConfigProvider,
+  AppRoot,
+  SplitLayout,
+  SplitCol,
+  View,
+  Panel,
+  PanelHeader,
+  Header,
+  Group,
+  usePlatform,
+  CellButton,
+} from '@vkontakte/vkui';
+import '@vkontakte/vkui/dist/vkui.css';
+import CatFact from './App';
+import AgePredictor from './AgePredictor';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const App = () => {
+  const platform = usePlatform();
+
+  const [main, setMainPanel] = React.useState('main');
+
+  return (
+    <AppRoot>
+      <SplitLayout header={platform !== 'vkcom' && <PanelHeader delimiter="none" />}>
+        <SplitCol autoSpaced>
+          <View activePanel={main}>
+            <Panel id="main">
+              <PanelHeader>Frontend intership task</PanelHeader>
+              <Group header={<Header mode="secondary">Cat facts</Header>}>
+                <CatFact />
+                <CellButton onClick={() => setMainPanel('secondPanel')}>Age predictor page</CellButton>
+              </Group>
+            </Panel>
+             
+            <Panel id='secondPanel'>
+            <PanelHeader>Frontend intership task</PanelHeader>
+            <Group header={<Header mode="secondary">Age predictor</Header>}>
+                <AgePredictor />
+                <CellButton onClick={() => setMainPanel('main')}>Cat facts page</CellButton>
+              </Group>
+            </Panel>
+          </View>
+        </SplitCol>
+      </SplitLayout>
+    </AppRoot>
+  );
+};
+
+const container = document.getElementById('root');
+const root = createRoot(container);
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <ConfigProvider appearance="light">
+    <AdaptivityProvider>
+      <App />
+    </AdaptivityProvider>
+  </ConfigProvider>,
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
