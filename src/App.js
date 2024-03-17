@@ -1,3 +1,5 @@
+// в этой файле реализовано задание с получением рандомных фактах о котах
+
 import React, { useState } from 'react';
 import {
   FormItem,
@@ -6,22 +8,24 @@ import {
 } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 
+// сама реализация функции
 function CatFact() {
   const [fact, setFact] = useState('');
   const textFieldRef = React.useRef(null);
-
+  // работа с запросами выполнена с помощью fetchApi, в связи с проблемой с установкой рекомендуемых библиотек
   const fetchCatFact = async () => {
     let res = await fetch('https://catfact.ninja/fact');
     let response = await res.json();
 
     setFact(response.fact);
-
+    // располагаем курсор после первого слова
     if (textFieldRef.current) {
       const firstSpaceIndex = response.fact.indexOf(' ') + 1;
       textFieldRef.current.setSelectionRange(firstSpaceIndex, firstSpaceIndex);
     }
   };
 
+  // возвращаем все необходимые компоненты
   return (
     
     <div>
@@ -47,8 +51,6 @@ function CatFact() {
           </Button>
         </FormItem>
       </form>
-      {/* <button onClick={fetchCatFact}>Get Cat Fact</button>
-      <textarea ref={textFieldRef} value={fact} onChange={(e) => setFact(e.target.value)} /> */}
     </div>
   );
 }

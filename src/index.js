@@ -1,3 +1,10 @@
+/*
+
+Реализация тестового задания для прохождения на стажировку на место фронтэнд разработчика в команду ВК
+задание выполнил Маматходжаев Рафаэль
+В этой работе я использовал библиотку для построения графических интерфейсов vkui. 
+*/
+
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import {
@@ -15,6 +22,7 @@ import {
   CellButton,
 } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
+// импорт необходимых функций, соответствующих двум условиям задачи
 import CatFact from './App';
 import AgePredictor from './AgePredictor';
 
@@ -23,6 +31,8 @@ const App = () => {
 
   const [main, setMainPanel] = React.useState('main');
 
+  // главная логика происходит у нас в функции app
+  // в данной реализации есть компоненет View и два компонента Platform
   return (
     <AppRoot>
       <SplitLayout header={platform !== 'vkcom' && <PanelHeader delimiter="none" />}>
@@ -52,6 +62,7 @@ const App = () => {
 
 const container = document.getElementById('root');
 const root = createRoot(container);
+// отрисовываем наш интерфейс, используя светлуую тему
 root.render(
   <ConfigProvider appearance="light">
     <AdaptivityProvider>

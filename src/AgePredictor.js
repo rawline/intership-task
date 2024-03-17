@@ -1,3 +1,5 @@
+// реализация второй части задания с предсказанием возвраста по имени
+
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   FormItem,
@@ -13,19 +15,23 @@ function AgePredictor() {
   const [timer, setTimer] = useState(null);
   const [lastRequestedName, setLastRequestedName] = useState('');
 
+  // используем useCallback для того, что бы мы могли использовать функцию fetchAge в хуке useEffect
   const fetchAge = useCallback(async (name) => {
 
     if (name === lastRequestedName || name === '') return;
 
+    // делаем запрос для получения предсказанного возвраста
     let res = await fetch(`https://api.agify.io/?name=${name}`);
     let response = await res.json();
+    // задаем полю Age полученный возраст
     setAge(`Predicted age: ${response.age}`);
     setLastRequestedName(name);
   }, [lastRequestedName]);
 
   useEffect(() => {
+    // если делается запрос с предыдущем именем, то запрос прерывается
     if (name === lastRequestedName) return;
-
+    // вызываем fetchAge после трех секунд бездействия
     if (timer) clearTimeout(timer);
     setTimer(setTimeout(() => fetchAge(name), 3000));
 
@@ -46,10 +52,10 @@ function AgePredictor() {
               >
 
                 <Input
-                  aria-labelledby="catFact-type"
+                  aria-labelledby="name-type"
                   id="catfact"
                   type="text"
-                  name="catfact"
+                  name="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Enter your name"
@@ -66,17 +72,6 @@ function AgePredictor() {
           </Button>
         </FormItem>
       </form>
-
-      {/* <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Enter your name"
-        />
-        <button type="submit">Submit</button>
-      </form>
-      {age && <p>{age}</p>}*/}
     </div> 
   );
 }
